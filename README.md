@@ -11,8 +11,8 @@ running inside this container.
 
 
 - [Usage](#usage)
-  - [With Docker Compose](#with-docker-compose)
   - [With Docker](#with-docker)
+  - [With Docker Compose](#with-docker-compose)
 - [Configuration](#configuration)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -21,9 +21,36 @@ running inside this container.
 
 ## Usage
 
+The [Configuration](#configuration) section describes the various environment
+variables you can use to configure the OpenSSH server.
+
 Please refer to the documentation of the [OpenSSH SSH daemon configuration
 file](https://www.freebsd.org/cgi/man.cgi?sshd_config%285%29) for more
-information on the SSH daemon's configuration options.
+information on options related to the SSH daemon's configuration.
+
+### With Docker
+
+```bash
+# Create a named volume to persist the server's host keys (optional).
+docker volume create openssh_host_keys
+
+# Run the container (all flags are optional).
+docker run \
+  --name=openssh \
+  --hostname=openssh \
+  -e SSH_ALLOW_TCP_FORWARDING=yes \
+  -e SSH_PERMIT_OPEN=db:5432 \
+  -e SSH_PUBLIC_KEY=changeme \
+  -e TZ=Europe/London \
+  -e USER_NAME=openssh \
+  -e USER_UID=2222 \
+  -e USER_GID=2222 \
+  -p 2222:2222 \
+  -v openssh_host_keys:/etc/openssh/host_keys \
+  -v /custom/authorized_keys:/home/openssh/.ssh/authorized_keys:ro \
+  --restart unless-stopped \
+  mei/openssh-server
+```
 
 ### With Docker Compose
 
@@ -60,30 +87,6 @@ services:
 volumes:
   # Create a named volume to persist the server's host keys.
   host_keys:
-```
-
-### With Docker
-
-```bash
-# Create a named volume to persist the server's host keys (optional).
-docker volume create openssh_host_keys
-
-# Run the container (all flags are optional).
-docker run \
-  --name=openssh \
-  --hostname=openssh \
-  -e SSH_ALLOW_TCP_FORWARDING=yes \
-  -e SSH_PERMIT_OPEN=db:5432 \
-  -e SSH_PUBLIC_KEY=changeme \
-  -e TZ=Europe/London \
-  -e USER_NAME=openssh \
-  -e USER_UID=2222 \
-  -e USER_GID=2222 \
-  -p 2222:2222 \
-  -v openssh_host_keys:/etc/openssh/host_keys \
-  -v /custom/authorized_keys:/home/openssh/.ssh/authorized_keys:ro \
-  --restart unless-stopped \
-  mei/openssh-server
 ```
 
 
