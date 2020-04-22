@@ -1,0 +1,11 @@
+/var/logs/openssh/*.log {
+  rotate 20
+  size 500k
+  compress
+  delaycompress
+  nodateext
+  missingok
+  notifempty
+  sharedscripts
+  su openssh openssh
+}

@@ -1,0 +1,2 @@
+#!/usr/bin/with-contenv bash
+exec s6-setuidgid "${USER_NAME:-openssh}" /usr/sbin/sshd -D -e -E /var/log/openssh/openssh.log -p 2222

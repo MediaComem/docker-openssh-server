@@ -1,0 +1,2 @@
+#!/usr/bin/with-contenv bash
+exec /usr/sbin/crond -c /etc/crontabs -f -l 5 -S
