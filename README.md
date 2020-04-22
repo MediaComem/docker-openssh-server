@@ -21,10 +21,9 @@ running inside this container.
 
 ## Usage
 
-Please refer to the documentation of the
-[https://www.freebsd.org/cgi/man.cgi?sshd_config%285%29](OpenSSH SSH daemon
-configuration file) for more information on the SSH daemon's configuration
-options.
+Please refer to the documentation of the [OpenSSH SSH daemon configuration
+file](https://www.freebsd.org/cgi/man.cgi?sshd_config%285%29) for more
+information on the SSH daemon's configuration options.
 
 ### With Docker Compose
 
