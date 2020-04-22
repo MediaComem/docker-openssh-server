@@ -22,7 +22,7 @@ running inside this container.
 ## Usage
 
 Please refer to the documentation of the
-[https://www.freebsd.org/cgi/man.cgi?sshd_config(5)](OpenSSH SSH daemon
+[https://www.freebsd.org/cgi/man.cgi?sshd_config%285%29](OpenSSH SSH daemon
 configuration file) for more information on the SSH daemon's configuration
 options.
 
