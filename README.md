@@ -49,7 +49,7 @@ docker run \
   -v openssh_host_keys:/etc/openssh/host_keys \
   -v /custom/authorized_keys:/home/openssh/.ssh/authorized_keys:ro \
   --restart unless-stopped \
-  mei/openssh-server
+  mediacomem/openssh-server
 ```
 
 ### With Docker Compose
@@ -60,7 +60,7 @@ version: "3.7"
 
 services:
   openssh-server:
-    image: mei/openssh-server
+    image: mediacomem/openssh-server
     container_name: openssh
     hostname: openssh
     environment:
