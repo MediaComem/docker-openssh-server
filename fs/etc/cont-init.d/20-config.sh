@@ -11,8 +11,15 @@ sed -i "s/su openssh openssh/su ${USER_NAME} ${USER_NAME}/g" /etc/logrotate.d/op
 (umask 077 && mkdir -p /etc/openssh/host_keys /var/{log,run}/openssh)
 chown "${USER_NAME}:${USER_NAME}" /etc/openssh /etc/openssh/host_keys /var/{log,run}/openssh
 
+# Create the SSH authorized_keys file if it doesn't exist yet.
+if ! test -f /etc/openssh/authorized_keys; then
+  (umask 066 && touch /etc/openssh/authorized_keys)
+  chown "${USER_NAME}:${USER_NAME}" /etc/openssh/authorized_keys
+fi
+
 # Delete OpenSSH keywords that are configured below.
 for keyword in \
+  AuthorizedKeysFile \
   AllowTcpForwarding \
   HostKey \
   PasswordAuthentication \
@@ -21,6 +28,9 @@ for keyword in \
 ; do
   sed -i "/^${keyword}/d" /etc/ssh/sshd_config
 done
+
+# Configure the path to the SSH authorized_keys file.
+echo "AuthorizedKeysFile /etc/openssh/authorized_keys" >> /etc/openssh/sshd_config
 
 # Allow/deny TCP forwarding.
 if test -n "$SSH_PERMIT_OPEN"; then
