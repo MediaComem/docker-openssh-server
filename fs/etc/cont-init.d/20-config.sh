@@ -75,8 +75,8 @@ if test "$(ls -A /etc/openssh/host_keys|wc -l)" -eq 0; then
   chown "${USER_NAME}:${USER_NAME}" /etc/openssh/host_keys/ssh_host_*_key*
 fi
 
-# Add public key from environment variable if specified (requires the file to be
-# writable by the user).
+# Add public key(s) from environment variable if specified (requires the file to
+# be writable by the user).
 if test -n "$SSH_PUBLIC_KEY"; then
   OLD_IFS=$IFS
   IFS=','
