@@ -68,10 +68,12 @@ echo "PasswordAuthentication no" >> /etc/openssh/sshd_config
 echo "PidFile /var/run/openssh/sshd.pid" >> /etc/openssh/sshd_config
 
 # Generate host SSH keys.
-ssh-keygen -A
-mv /etc/ssh/ssh_host_*_key* /etc/openssh/host_keys/
-chmod 400 /etc/openssh/host_keys/ssh_host_*_key*
-chown "${USER_NAME}:${USER_NAME}" /etc/openssh/host_keys/ssh_host_*_key*
+if test "$(ls -A /etc/openssh/host_keys|wc -l)" -eq 0; then
+  ssh-keygen -A
+  mv /etc/ssh/ssh_host_*_key* /etc/openssh/host_keys/
+  chmod 400 /etc/openssh/host_keys/ssh_host_*_key*
+  chown "${USER_NAME}:${USER_NAME}" /etc/openssh/host_keys/ssh_host_*_key*
+fi
 
 # Add public key from environment variable if specified (requires the file to be
 # writable by the user).
