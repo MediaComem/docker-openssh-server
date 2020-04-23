@@ -7,8 +7,9 @@ source "${DIR}/00-vars.sh"
 # Configure logrotate to rotate the OpenSSH server's logs as the correct user.
 sed -i "s/su openssh openssh/su ${USER_NAME} ${USER_NAME}/g" /etc/logrotate.d/openssh
 
-# Create directories for the OpenSSH server.
-(umask 077 && mkdir -p /etc/openssh/host_keys /var/{log,run}/openssh)
+# Create directories and files for the OpenSSH server.
+mkdir -p /etc/openssh/host_keys /var/{log,run}/openssh
+chmod 700 /etc/openssh /etc/openssh/host_keys /var/{log,run}/openssh
 chown "${USER_NAME}:${USER_NAME}" /etc/openssh /etc/openssh/host_keys /var/{log,run}/openssh
 
 # Create the SSH authorized_keys file if it doesn't exist yet.
