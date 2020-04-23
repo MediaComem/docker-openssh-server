@@ -45,9 +45,12 @@ else
 fi
 
 # Configure host keys.
-echo "HostKey /etc/openssh/host_keys/ssh_host_rsa_key" >> /etc/ssh/sshd_config
-echo "HostKey /etc/openssh/host_keys/ssh_host_ecdsa_key" >> /etc/ssh/sshd_config
-echo "HostKey /etc/openssh/host_keys/ssh_host_ed25519_key" >> /etc/ssh/sshd_config
+OLD_IFS=$IFS
+IFS=','
+for key_name in ${SSH_HOST_KEY_NAMES:-ssh_host_rsa_key,ssh_host_ecdsa_key,ssh_host_ed25519_key}; do
+  echo "HostKey /etc/openssh/host_keys/${key_name}" >> /etc/ssh/sshd_config
+done
+IFS="$OLD_IFS"
 
 # Disable password authentication.
 echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
