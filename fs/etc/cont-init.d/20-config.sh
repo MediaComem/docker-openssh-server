@@ -78,6 +78,11 @@ fi
 # Add public key from environment variable if specified (requires the file to be
 # writable by the user).
 if test -n "$SSH_PUBLIC_KEY"; then
-  echo "$SSH_PUBLIC_KEY" >> "$USER_SSH_AUTHORIZED_KEYS_FILE"
+  OLD_IFS=$IFS
+  IFS=','
+  for public_key in "$SSH_PUBLIC_KEY"; do
+    echo "$public_key" >> /etc/openssh/authorized_keys
+  done
+  IFS="$OLD_IFS"
   echo "Public key from \$PUBLIC_KEY authorized"
 fi
