@@ -36,7 +36,7 @@ for keyword in \
   PermitOpen \
   PidFile \
 ; do
-  sed -i "/^${keyword}/d" /etc/openssh/sshd_config
+  sed -i "s/^\(${keyword}\)/#\1/g" /etc/openssh/sshd_config
 done
 
 # Configure the path to the SSH authorized_keys file.
