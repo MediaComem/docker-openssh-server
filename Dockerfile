@@ -10,10 +10,8 @@ RUN apk add --no-cache --virtual setup-dependencies ca-certificates wget && \
   rm /tmp/s6-overlay-amd64.tar.gz && \
   apk add --no-cache \
     bash \
-    logrotate \
     openssh-server \
     openssh-sftp-server \
-    sudo \
     tzdata \
   && \
   apk del setup-dependencies && \

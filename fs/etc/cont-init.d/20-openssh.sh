@@ -4,13 +4,10 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${DIR}/00-vars.sh"
 
-# Configure logrotate to rotate the OpenSSH server's logs as the correct user.
-sed -i "s/su openssh openssh/su ${USER_NAME} ${USER_NAME}/g" /etc/logrotate.d/openssh
-
 # Create directories and files for the OpenSSH server.
-mkdir -p /etc/openssh/host_keys /var/{log,run}/openssh
-chmod 700 /etc/openssh /etc/openssh/host_keys /var/{log,run}/openssh
-chown "${USER_NAME}:${USER_NAME}" /etc/openssh /etc/openssh/host_keys /var/{log,run}/openssh
+mkdir -p /etc/openssh/host_keys /var/run/openssh
+chmod 700 /etc/openssh /etc/openssh/host_keys /var/run/openssh
+chown "${USER_NAME}:${USER_NAME}" /etc/openssh /etc/openssh/host_keys /var/run/openssh
 
 # Create the SSH daemon's sshd_config file if it doesn't exist yet.
 if ! test -f /etc/openssh/sshd_config; then
@@ -68,7 +65,7 @@ echo "PasswordAuthentication no" >> /etc/openssh/sshd_config
 echo "PidFile /var/run/openssh/sshd.pid" >> /etc/openssh/sshd_config
 
 # Generate host SSH keys.
-if test "$(ls -A /etc/openssh/host_keys|wc -l)" -eq 0; then
+if test "$(ls -1 -A /etc/openssh/host_keys|wc -l)" -eq 0; then
   ssh-keygen -A
   mv /etc/ssh/ssh_host_*_key* /etc/openssh/host_keys/
   chmod 400 /etc/openssh/host_keys/ssh_host_*_key*
