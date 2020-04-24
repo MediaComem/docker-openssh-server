@@ -4,19 +4,20 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${DIR}/00-vars.sh"
 
-# Create directories and files for the OpenSSH server.
-mkdir -p /etc/openssh/host_keys /var/run/openssh
-chmod 700 /etc/openssh /etc/openssh/host_keys /var/run/openssh
-chown "${USER_NAME}:${USER_NAME}" /etc/openssh /etc/openssh/host_keys /var/run/openssh
+# Set ownership of OpenSSH server directories.
+chown "${USER_NAME}:${USER_NAME}" /etc/openssh /var/run/openssh
 
-# Create the SSH daemon's sshd_config file if it doesn't exist yet.
-if ! test -f /etc/openssh/sshd_config; then
-  mv /etc/ssh/sshd_config /etc/openssh/sshd_config
-  chmod 640 /etc/openssh/sshd_config
-  chown "root:${USER_NAME}" /etc/openssh/sshd_config
-else
-  rm /etc/ssh/sshd_config
+# Create the SSH host keys directory if it doesn't exist yet.
+if ! test -d /etc/openssh/host_keys; then
+  (umask 077 && mkdir /etc/openssh/host_keys)
+  chown "${USER_NAME}:${USER_NAME}" /etc/openssh/host_keys
 fi
+
+# Set the ownership and permissions of the SSH daemon's configuration file.
+# Do not stop if it fails; it may be a read-only mount.
+chmod 640 /etc/openssh/sshd_config && \
+  chown "root:${USER_NAME}" /etc/openssh/sshd_config || \
+  echo "Skipped modification of /etc/openssh/sshd_config"
 
 # Create the SSH authorized_keys file if it doesn't exist yet.
 if ! test -f /etc/openssh/authorized_keys; then

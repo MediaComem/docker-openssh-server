@@ -15,7 +15,11 @@ RUN apk add --no-cache --virtual setup-dependencies ca-certificates wget && \
     tzdata \
   && \
   apk del setup-dependencies && \
-  rm -rf /tmp/*
+  rm -rf /tmp/* && \
+  mkdir -p /etc/openssh /var/run/openssh && \
+  chmod 700 /etc/openssh /var/run/openssh && \
+  mv /etc/ssh/sshd_config /etc/openssh/sshd_config && \
+  chmod 644 /etc/openssh/sshd_config
 
 COPY /fs /
 
