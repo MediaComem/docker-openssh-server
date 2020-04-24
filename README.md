@@ -18,6 +18,7 @@ running inside this container.
   - [Persisting the OpenSSH server's host keys](#persisting-the-openssh-servers-host-keys)
   - [Using a custom SSH `authorized_keys` file](#using-a-custom-ssh-authorized_keys-file)
   - [Customizing the SSH daemon's configuration file](#customizing-the-ssh-daemons-configuration-file)
+  - [Customizing the Message Of The Day (MOTD)](#customizing-the-message-of-the-day-motd)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -102,6 +103,7 @@ All variables are optional.
 
 Variable                   | Default value                                              | Description
 :------------------------- | :--------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------
+`MOTD`                     | -                                                          | Optional one-line message of the day.
 `SSH_ALLOW_TCP_FORWARDING` | `no`                                                       | `AllowTcpForwarding` SSH daemon config option.
 `SSH_HOST_KEY_NAMES`       | `ssh_host_rsa_key,ssh_host_ecdsa_key,ssh_host_ed25519_key` | Comma-separated list of SSH host key files to read from the `/etc/openssh/host_keys` directory (configures a `HostKey` SSH daemon config option for each value).
 `SSH_PERMIT_OPEN`          | `none` (unless `$SSH_ALLOW_TCP_FOWARDING` is set)          | `PermitOpen` SSH daemon config option.
@@ -170,3 +172,17 @@ owned by `root` and the `openssh` user, with permissions `640`).
 If you extend this project's `Dockerfile`, you may put a pre-configured version
 of this file at the correct path. However, note that it will be modified to fit
 the configuration applied through environment variables.
+
+### Customizing the Message Of The Day (MOTD)
+
+To quickly customize the MOTD shown to the user on connection, you may set the
+`$MOTD` environment variable. Two new lines will be added to the value for
+formatting.
+
+If you extend this project's `Dockerfile`, you may also override the `/etc/motd`
+file. In that case, no new lines will be added. You should add them to the file
+yourself.
+
+You may also mount a custom version of the file using the `--volume`
+command-line option or the `volumes` Docker Compose option without having to
+create a custom `Dockerfile`.
