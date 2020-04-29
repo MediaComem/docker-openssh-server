@@ -29,6 +29,7 @@ fi
 for keyword in \
   AuthorizedKeysFile \
   AllowTcpForwarding \
+  ChallengeResponseAuthentication \
   HostKey \
   PasswordAuthentication \
   PermitOpen \
@@ -50,6 +51,9 @@ else
   echo "AllowTcpForwarding no" >> /etc/openssh/sshd_config
   echo "PermitOpen none" >> /etc/openssh/sshd_config
 fi
+
+# Disable challenge-response authentication.
+echo "ChallengeResponseAuthentication no" >> /etc/openssh/sshd_config
 
 # Configure host keys.
 OLD_IFS=$IFS
